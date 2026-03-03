@@ -1,5 +1,18 @@
 # LCMS Core
 
+## Curriculum Architecture
+
+The curriculum follows a hierarchical structure:
+
+**Unit → Section → Lesson → Activity**
+
+- **Unit** — top-level curriculum grouping. Represented by a `Resource` model.
+- **Section** — a subdivision within a unit. Represented by a `Resource` model.
+- **Lesson** — an individual lesson within a section. Represented by a `Resource` model and has an associated `Document` model.
+- **Activity** — a part of a lesson. Has no dedicated database model.
+
+**Materials** are standalone objects that can be attached to lessons as supporting content (PDFs, worksheets, etc.).
+
 ## Development
 
 ### Prerequisites
@@ -129,5 +142,3 @@ docker buildx build --platform linux/arm64 \
 ```
 
 > **Note:** The `--push` flag requires authentication to a container registry. The `--load` flag only works with a single platform as Docker cannot load multi-platform images locally.
-
-
