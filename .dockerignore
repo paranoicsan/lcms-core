@@ -55,5 +55,4 @@
 .claude
 
 # Config files
-config/google/*
-!/config/google/code.gs
+config/google
