@@ -41,6 +41,7 @@ RUN apt-get update -qq && \
     libyaml-dev \
     postgresql-client \
     curl \
+    shellcheck \
     vim && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 

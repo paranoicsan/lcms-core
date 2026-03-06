@@ -57,11 +57,10 @@ Make sure you're executing commands under _cloud66-user_
 $ sudo -i -u cloud66-user
 ```
 
-Make sure that the following directory exists on a server and is symlinked correctly
+Make sure that the following directory exists on a server
 ```bash
 $ mkdir -p "$STACK_BASE/shared/google"
 $ chown cloud66-user:cloud66-user "$STACK_BASE/shared/google"
-$ ln -nsf "$STACK_BASE/shared/google" "$STACK_PATH/config/google"
 ```
 
 Copy downloaded JSON file and set appropriate ownership and access rights for it (where `cloud66-user` is a system username under which web application is running)
@@ -71,6 +70,12 @@ $ cp client_secret.json $STACK_BASE/shared/google/
 $ cd $STACK_BASE/shared/google
 $ sudo chown cloud66-user:cloud66-user client_secret.json
 $ sudo chmod 755 client_secret.json
+```
+
+Link shared files into the application config directory. The script creates symlinks only for files that don't already exist in the destination, preserving files shipped with the repository (e.g. `code.gs`).
+
+```bash
+$ script/link_shared_google.sh
 ```
 
 #### Application token
@@ -88,12 +93,19 @@ You will be asked to go by link, give app permissions and paste code into the te
 $ bundle exec rake google:setup_auth["https://example.com"]
 ```
 
-This will create `config/google/app_token.yaml`. Change the ownership of the `app_token.yaml` otherwise it will not be accessible for the application:
+This will create `config/google/app_token.yaml`. Move it to the shared directory and set appropriate ownership:
 
 ```bash
+$ mv $STACK_PATH/config/google/app_token.yaml $STACK_BASE/shared/google/
 $ cd $STACK_BASE/shared/google
 $ chown cloud66-user:app_writers app_token.yaml
 $ sudo chmod g+w app_token.yaml
+```
+
+Run the linking script again so that `app_token.yaml` gets symlinked back from the shared directory:
+
+```bash
+$ script/link_shared_google.sh
 ```
 
 #### Add Google App script
